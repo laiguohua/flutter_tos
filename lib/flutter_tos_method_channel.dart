@@ -7,7 +7,7 @@ import 'flutter_tos_platform_interface.dart';
 class MethodChannelFlutterTos extends FlutterTosPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final methodChannel = const MethodChannel('com.jiuxiao.flutter_tos.channel');
+  final methodChannel = const MethodChannel('com.jx.flutter_tos.channel');
 
   @override
   Future<String?> getPlatformVersion() {

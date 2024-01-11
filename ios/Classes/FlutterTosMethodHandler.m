@@ -27,7 +27,7 @@ static FlutterTosMethodHandler *instance = nil;
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar{
     FlutterMethodChannel* channel = [FlutterMethodChannel
-        methodChannelWithName:@"com.jiuxiao.flutter_tos.channel"
+        methodChannelWithName:@"com.jx.flutter_tos.channel"
               binaryMessenger:[registrar messenger]];
     [FlutterTosMethodHandler.sharedInstance configMethodChannel:channel];
   [registrar addMethodCallDelegate:FlutterTosMethodHandler.sharedInstance channel:channel];

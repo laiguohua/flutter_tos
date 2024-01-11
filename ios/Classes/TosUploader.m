@@ -99,7 +99,7 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
     time = [time stringByReplacingOccurrencesOfString:@"." withString:@""];
     int r = arc4random() % 1000000;
     NSString *tosKey = [NSString stringWithFormat:@"%@_%d_%@",time,r,[sigleItem.fileStr lastPathComponent]];
-    NSLog(@"=====路径为%@",tosKey);
+//    NSLog(@"=====路径为%@",tosKey);
     put.tosKey = tosKey;
     put.tosFilePath = sigleItem.fileStr;
     TOSTask *task = [self.client putObjectFromFile:put];
@@ -107,7 +107,7 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
     TOSCancellationToken *cacelToken = [TOSCancellationToken new];
     //取消请求时执行到这里
     TOSCancellationTokenRegistration *tokenRegist = [cacelToken registerCancellationObserverWithBlock:^{
-        NSLog(@"执行了取消上传");
+//        NSLog(@"执行了取消上传");
         TosUploadItem *aitem = task.item;
         if(!aitem.isCompleted){
             aitem.isCompleted = YES;
@@ -126,12 +126,12 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
         TosUploadItem *aitem = t.item;
         if(aitem.isCompleted) return nil;
         if (!t.error) {
-                NSLog(@"Create bucket success.");
+//                NSLog(@"Create bucket success.");
             aitem.code = @(0);
             aitem.msg = @"";
             aitem.isCompleted = YES;
             NSString *url = [host stringByAppendingPathComponent:tosKey];
-            NSLog(@"url为====%@",url);
+//            NSLog(@"url为====%@",url);
             aitem.downloadUrl = url;
         } else {
             NSLog(@"Create bucket failed, error: %@.", t.error);
@@ -140,7 +140,7 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
             aitem.isCompleted = YES;
         }
         t.item = aitem;
-        NSLog(@"单个回调====");
+//        NSLog(@"单个回调====");
         dispatch_async(dispatch_get_main_queue(), ^{
             if(compleBlock){
                 compleBlock(aitem);
