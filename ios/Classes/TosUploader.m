@@ -103,7 +103,7 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
     filePath = [filePath stringByReplacingOccurrencesOfString:@"." withString:@""];
     filePath = [filePath stringByReplacingOccurrencesOfString:@":" withString:@""];
     NSString *tosKey = [NSString stringWithFormat:@"%@_%d_%@.%@",time,r,filePath,[sigleItem.fileStr pathExtension]];
-    NSLog(@"=====路径为%@",tosKey);
+//    NSLog(@"=====路径为%@",tosKey);
     put.tosKey = tosKey;
     put.tosFilePath = sigleItem.fileStr;
     TOSTask *task = [self.client putObjectFromFile:put];
@@ -134,7 +134,7 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
             aitem.code = @(0);
             aitem.msg = @"";
             aitem.isCompleted = YES;
-            NSString *url = [host stringByAppendingPathComponent:tosKey];
+            NSString *url = [NSString stringWithFormat:@"%@%@%@",host,[host hasSuffix:@"/"]?@"":@"/",tosKey];
 //            NSLog(@"url为====%@",url);
             aitem.downloadUrl = url;
         } else {
