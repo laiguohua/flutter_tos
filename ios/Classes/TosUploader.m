@@ -91,6 +91,8 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
 - (TOSCancellationTokenRegistration *)_uploadSigleItem:(TosUploadItem *)sigleItem  compleBlock:(TOSUploadSigleCompleBlock)compleBlock{
     NSString *bucket = self.lastParam[@"Bucket"]?:@"";
     NSString *host = self.lastParam[@"Host"]?:@"";
+    NSString *s = @"\\";
+    host = [host stringByReplacingOccurrencesOfString:s withString:@""];
     NSInteger expiredTime = [self.lastParam[@"ExpiredTime"] integerValue];
     
     TOSPutObjectFromFileInput *put = [[TOSPutObjectFromFileInput alloc] init];
@@ -98,8 +100,9 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
     NSString *time = [@([[NSDate date] timeIntervalSince1970]) stringValue];
     time = [time stringByReplacingOccurrencesOfString:@"." withString:@""];
     int r = arc4random() % 1000000;
-    NSString *tosKey = [NSString stringWithFormat:@"%@_%d_%@",time,r,[sigleItem.fileStr lastPathComponent]];
-//    NSLog(@"=====路径为%@",tosKey);
+    
+    NSString *tosKey = [NSString stringWithFormat:@"%@_%d_%@.%@",time,r,[[sigleItem.fileStr lastPathComponent] stringByDeletingPathExtension],[sigleItem.fileStr pathExtension]];
+    NSLog(@"=====路径为%@",tosKey);
     put.tosKey = tosKey;
     put.tosFilePath = sigleItem.fileStr;
     TOSTask *task = [self.client putObjectFromFile:put];
