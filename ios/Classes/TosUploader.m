@@ -105,7 +105,7 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
     NSString *md5;
     @try {
         md5 = [self getBigfileMD5:sigleItem.fileStr];
-        NSLog(@"计算出来的MD5值为===%@",md5);
+//        NSLog(@"计算出来的MD5值为===%@",md5);
     } @catch (NSException *exception) {
         
     } @finally {
@@ -125,12 +125,12 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
                 TOSHeadObjectOutput *headOutput = t.result;
                 if(headOutput.tosStatusCode == 200){
                     fileExsit = YES;
-                    NSLog(@"文件存在");
+//                    NSLog(@"文件存在");
                     sigleItem.code = @(0);
                     sigleItem.msg = @"";
                     sigleItem.isCompleted = YES;
                     NSString *url = [NSString stringWithFormat:@"%@%@%@",host,([host hasSuffix:@"/"] || [tosKey hasPrefix:@"/"])?@"":@"/",tosKey];
-                    NSLog(@"url为====%@",url);
+//                    NSLog(@"url为====%@",url);
                     sigleItem.downloadUrl = url;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if(compleBlock){
@@ -148,7 +148,7 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
     }
     //文件如果不存在，则上传
     if(!fileExsit){
-        NSLog(@"文件不存在,tosKey为===%@",tosKey);
+//        NSLog(@"文件不存在,tosKey为===%@",tosKey);
         TOSPutObjectFromFileInput *put = [[TOSPutObjectFromFileInput alloc] init];
         put.tosBucket = bucket;
         put.tosKey = tosKey;
@@ -185,7 +185,7 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
                 //            NSLog(@"url为====%@",url);
                 aitem.downloadUrl = url;
             } else {
-                NSLog(@"Create bucket failed, error: %@.", t.error);
+//                NSLog(@"Create bucket failed, error: %@.", t.error);
                 aitem.code = @(t.error.code);
                 aitem.msg = [t.error localizedDescription];
                 aitem.isCompleted = YES;
