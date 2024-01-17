@@ -41,34 +41,50 @@ static FlutterTosMethodHandler *instance = nil;
     if([@"getPlatformVersion" isEqualToString:call.method]){
         result([UIDevice currentDevice].systemVersion);
     }else if ([@"configClient" isEqualToString:call.method]) {
-      result(@([self.uploader configUploader:call.arguments]));
-  }else if([@"uploadFiles" isEqualToString:call.method]){
-      NSArray <NSDictionary *>* files = call.arguments[@"files"];
-      if(![files isKindOfClass:NSArray.class]){
-          if(result){
-              result(call.arguments);
-          }
-          return;
-      }
-      [self.uploader uploadFiles:files compleBlock:^(NSArray<NSDictionary *> *uploadFiles) {
-          if(result){
-              result(@{@"files":uploadFiles});
-          }
-      }];
-  }else if ([@"cancelUpload" isEqualToString:call.method]) {
-      NSArray <NSString *> *cancelIds = call.arguments[@"ids"]?:@[];
-      [self.uploader cancelUploadWithIds:cancelIds];
-      if(result){
-          result(@(YES));
-      }
-  }else if ([@"cancelAllUpload" isEqualToString:call.method]) {
-      [self.uploader cancelAllUpload];
-      if(result){
-          result(@(YES));
-      }
-  }  else {
-    result(FlutterMethodNotImplemented);
-  }
+        result(@([self.uploader configUploader:call.arguments]));
+    }else if([@"uploadFiles" isEqualToString:call.method]){
+        NSArray <NSDictionary *>* files = call.arguments[@"files"];
+        if(![files isKindOfClass:NSArray.class]){
+            if(result){
+                result(call.arguments);
+            }
+            return;
+        }
+        [self.uploader uploadFiles:files compleBlock:^(NSArray<NSDictionary *> *uploadFiles) {
+            if(result){
+                result(@{@"files":uploadFiles});
+            }
+        }];
+    }else if ([@"cancelUpload" isEqualToString:call.method]) {
+        NSArray <NSString *> *cancelIds = call.arguments[@"ids"]?:@[];
+        [self.uploader cancelUploadWithIds:cancelIds];
+        if(result){
+            result(@(YES));
+        }
+    }else if ([@"cancelAllUpload" isEqualToString:call.method]) {
+        [self.uploader cancelAllUpload];
+        if(result){
+            result(@(YES));
+        }
+    }else if ([@"getFileMd5" isEqualToString:call.method]) {
+        //获取文件的MD5值
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            NSString *md5 = @"";
+            @try {
+                NSString *file = call.arguments[@"file"];
+                md5 = [self.uploader getBigfileMD5:file];
+            } @catch (NSException *exception) {
+                
+            } @finally {
+                if(result){
+                    result(md5);
+                }
+            }
+        });
+        
+    }   else {
+        result(FlutterMethodNotImplemented);
+    }
 }
 
 

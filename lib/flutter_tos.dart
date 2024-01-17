@@ -42,4 +42,9 @@ class FlutterTos {
   Future<void> cancelAllUpload() {
     return FlutterTosPlatform.instance.cancelAllUpload();
   }
+
+  //获取文件的MD5值
+  Future<String> getFileMd5({required String file}) {
+    return FlutterTosPlatform.instance.getFileMd5(file: file);
+  }
 }

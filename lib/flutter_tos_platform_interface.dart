@@ -42,4 +42,9 @@ abstract class FlutterTosPlatform extends PlatformInterface {
   Future<void> cancelAllUpload() {
     throw UnimplementedError('cancelAllUpload() has not been implemented.');
   }
+
+  //获取文件的MD5值
+  Future<String> getFileMd5({required String file}) {
+    throw UnimplementedError('cancelAllUpload() has not been implemented.');
+  }
 }

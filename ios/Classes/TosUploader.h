@@ -20,6 +20,9 @@ typedef void(^TOSUploadCompleBlock)(NSArray <NSDictionary *>*uploadFiles);
 
 - (void)cancelAllUpload;
 
+/// 计算大文件MD5
+- (NSString*)getBigfileMD5:(NSString*)path;
+
 @end
 
 

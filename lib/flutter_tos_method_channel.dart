@@ -38,4 +38,11 @@ class MethodChannelFlutterTos extends FlutterTosPlatform {
   Future<void> cancelAllUpload() {
     return methodChannel.invokeMethod('cancelAllUpload');
   }
+
+  @override
+  Future<String> getFileMd5({required String file}) async {
+    String? md5 =
+        await methodChannel.invokeMethod('getFileMd5', {"file": file});
+    return md5 ?? "";
+  }
 }
