@@ -92,6 +92,7 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
 - (TOSCancellationTokenRegistration *)_uploadSigleItem:(TosUploadItem *)sigleItem  compleBlock:(TOSUploadSigleCompleBlock)compleBlock{
     NSString *bucket = self.lastParam[@"Bucket"]?:@"";
     NSString *host = self.lastParam[@"Host"]?:@"";
+    NSString *dirStr = self.lastParam[@"_dir_"]?:@"";
     host = [host stringByReplacingOccurrencesOfString:@"\\" withString:@""];
     NSInteger expiredTime = [self.lastParam[@"ExpiredTime"] integerValue];
     NSString *time = [@([[NSDate date] timeIntervalSince1970]) stringValue];
@@ -101,6 +102,10 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
     filePath = [filePath stringByReplacingOccurrencesOfString:@"." withString:@""];
     filePath = [filePath stringByReplacingOccurrencesOfString:@":" withString:@""];
     NSString *tosKey = [NSString stringWithFormat:@"%@_%d_%@.%@",time,r,filePath,[sigleItem.fileStr pathExtension]];
+    //有文件夹的话要加上
+    if(dirStr.length > 0){
+        tosKey = [dirStr stringByAppendingString:tosKey];
+    }
     //计算文件的MD5值作为文件名
     NSString *md5;
     @try {
@@ -114,8 +119,14 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
     __block BOOL fileExsit = NO;
     //如果计算出来了MD5值，则用MD5值作为tosKey
     if(md5 && md5.length > 1){
+        tosKey = md5;
+        //有文件夹的话要加上
+        if(dirStr.length > 0){
+            tosKey = [dirStr stringByAppendingString:md5];
+        }
         //获取元数据，查看该对象存不存在，存在的话就不用上传了
-        tosKey = [md5 stringByAppendingPathExtension:[sigleItem.fileStr pathExtension]];
+        tosKey = [tosKey stringByAppendingPathExtension:[sigleItem.fileStr pathExtension]];
+        
         TOSHeadObjectInput *headInput = [TOSHeadObjectInput new];
         headInput.tosBucket = bucket;
         headInput.tosKey = tosKey;
