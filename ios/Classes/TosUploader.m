@@ -104,7 +104,7 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
     NSString *tosKey = [NSString stringWithFormat:@"%@_%d_%@.%@",time,r,filePath,[sigleItem.fileStr pathExtension]];
     //有文件夹的话要加上
     if(dirStr.length > 0){
-        tosKey = [dirStr stringByAppendingString:tosKey];
+        tosKey = [NSString stringWithFormat:@"%@%@%@",dirStr, ([dirStr hasSuffix:@"/"] || [tosKey hasPrefix:@"/"])?@"":@"/",tosKey];
     }
     //计算文件的MD5值作为文件名
     NSString *md5;
@@ -122,7 +122,7 @@ typedef void(^TOSUploadSigleCompleBlock)(TosUploadItem *item);
         tosKey = md5;
         //有文件夹的话要加上
         if(dirStr.length > 0){
-            tosKey = [dirStr stringByAppendingString:md5];
+            tosKey = [NSString stringWithFormat:@"%@%@%@",dirStr,([dirStr hasSuffix:@"/"] || [md5 hasPrefix:@"/"])?@"":@"/",md5];
         }
         //获取元数据，查看该对象存不存在，存在的话就不用上传了
         tosKey = [tosKey stringByAppendingPathExtension:[sigleItem.fileStr pathExtension]];
